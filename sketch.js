@@ -1,42 +1,39 @@
 var ship;
+var asteroids = [];
 
 function setup() {
-  createCanvas (600, 400);
+  createCanvas (600, 600);
   ship = new Ship;
+  for (var i = 0; i < 5; i++) {
+    asteroids.push(new Asteroid());
+  }
 }
 
 function draw() {
   background(0);
   ship.render();
+  ship.turn();
+  ship.update();
+  ship.edges();
 
+  for (var i = 0; i < asteroids.length; i++) {
+    asteroids[i].render();
+    asteroids[i].update();
+    asteroids[i].edges();
+  }
+}
 
-
-
+function keyReleased() {
+  ship.setRotation(0);
+  ship.boosting(false);
 }
 
 function keyPressed() {
   if (keyCode == RIGHT_ARROW) {
-    ship.turn(0.1);
+    ship.setRotation(0.1);
   } else if (keyCode == LEFT_ARROW) {
-    ship.turn(-0.1);
+    ship.setRotation(-0.1);
+  } else if (keyCode == UP_ARROW) {
+    ship.boosting(true);
   }
-}
-
-function Ship() {
-  this.pos = createVector(width/2, height/2);
-  this.r = 20;
-  this.heading = 0;
-  noFill();
-  stroke(255);
-
-  this.render = function() {
-    translate(this.pos.x, this.pos.y);
-    rotate(this.heading);
-    triangle(-this.r, this.r, this.r, this.r, 0, -this.r);
-  }
-
-  this.turn = function(angle) {
-    this.heading += angle;
-  }
-
 }
